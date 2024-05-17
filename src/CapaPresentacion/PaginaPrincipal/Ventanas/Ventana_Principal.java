@@ -241,7 +241,7 @@ public class Ventana_Principal extends javax.swing.JPanel {
             JTable target = (JTable)evt.getSource();
             int fila = tableInventario.rowAtPoint(evt.getPoint());; // Obtiene la fila seleccionada
             
-            idProducto = tableInventario.getValueAt(fila, 1).toString();
+            idProducto = tableInventario.getValueAt(fila, 0).toString();
            // System.out.println(idProducto);
             // Crea un nuevo JFrame
             Ventana_Productos_Registro VentProductos = new Ventana_Productos_Registro();

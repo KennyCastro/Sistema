@@ -37,7 +37,7 @@ public class conexionProductoAlmacen {
     
      public DefaultTableModel mostrarTablaProductoAlmacen (String buscar){
         DefaultTableModel modelo;
-        String[]titulos={"Imagen","ID","Producto","Cantidad","Tipo","Unidad","F. Registro","F. Vencimiento","N. Registrante","Ap. Registrante","Pr. Compra","Pr.Venta"};
+        String[]titulos={/*"Imagen",*/"ID","Producto","Cantidad","Tipo","Unidad","F. Registro","F. Vencimiento","N. Registrante","Ap. Registrante","Pr. Compra","Pr.Venta"};
         modelo = new DefaultTableModel(null,titulos);
         
         String[] registro = new String[12];
@@ -51,18 +51,19 @@ public class conexionProductoAlmacen {
             ResultSet rs = st.executeQuery(sql);
             
             while(rs.next()){
-                registro[0] = rs.getString(12);
-                registro[1] = rs.getString(1);
-                registro[2] = rs.getString(2);
-                registro[3] = rs.getString(3);
-                registro[4] = rs.getString(4);
-                registro[5] = rs.getString(5);
-                registro[6] = rs.getString(6);
-                registro[7] = rs.getString(7);
-                registro[8] = rs.getString(8);
-                registro[9] = rs.getString(9);
-                registro[10] = rs.getString(10);
-                registro[11]=rs.getString(11);
+                //registro[0] = rs.getString(12);
+                registro[0] = rs.getString(1);
+                registro[1] = rs.getString(2);
+                registro[2] = rs.getString(3);
+                registro[3] = rs.getString(4);
+                registro[4] = rs.getString(5);
+                registro[5] = rs.getString(6);
+                registro[6] = rs.getString(7);
+                registro[7] = rs.getString(8);
+                registro[8] = rs.getString(9);
+                registro[9] = rs.getString(10);
+                registro[10]=rs.getString(11);
+                
                 
                 
                 modelo.addRow(registro);
@@ -248,6 +249,30 @@ public class conexionProductoAlmacen {
         }
        }
      
+      
+      public boolean eliminarDatos(datosProductoAlmacen     datos){
+        sql="call pa_eliminarProducto(?)";
+        
+        try{
+            PreparedStatement pst = conect.prepareStatement(sql);
+            
+            pst.setString(1,datos.getIdProducto());
+            int n = pst.executeUpdate();
+            if(n!=0)
+                return true;
+            else
+                return false;
+        }
+        catch(Exception e){
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+    }
+      
+      
+      
+      
      
      public String darIdTipo(String nombreTipo){
          sql="select * from tipoproducto";
@@ -331,6 +356,25 @@ public class conexionProductoAlmacen {
     }
      
       
+       public int verificarRegistroExistente (String id){
+        sql = ("select fun_existeRegistroProducto(?)");
+        
+      try {
+          
+            PreparedStatement pst = conect.prepareStatement(sql);
+            pst.setString (1,id);
+            ResultSet rs = pst.executeQuery();
+            String existe="";
+            while(rs.next()){
+                existe=rs.getString(1);
+            }
+            return Integer.valueOf(existe);
+      }
+           catch(Exception e){
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return 0;
+        }
+    }
       
       
       

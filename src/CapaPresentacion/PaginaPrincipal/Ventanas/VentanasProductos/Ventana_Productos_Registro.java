@@ -41,11 +41,16 @@ import CapaPresentacion.PaginaPrincipal.Ventanas.Ventana_Principal;
 import static CapaPresentacion.PaginaPrincipal.main.Principal.containerVentanas;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.time.ZoneId;
 import java.time.LocalDate;
 import static CapaPresentacion.PaginaPrincipal.main.Principal.principalVentana;
+import java.awt.Graphics;
+
 
 
 /**
@@ -56,6 +61,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
 
      int xMouse,  yMouse;
      String rutaImage = "";
+     String porSi="";
      SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
   ExpresionesRegulares expresiones= new ExpresionesRegulares();
      public static String accion = "crear";
@@ -138,7 +144,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
                 calendarPropertyChange(evt);
             }
         });
-        vent_Inicial_Productos1.add(calendar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 240, -1, -1));
+        vent_Inicial_Productos1.add(calendar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, -1, -1));
 
         cajafotoP.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cajafotoP.setText("No hay foto");
@@ -336,6 +342,11 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnEliminarMouseExited(evt);
+            }
+        });
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
             }
         });
         vent_Inicial_Productos1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(615, 59, 219, 43));
@@ -627,24 +638,67 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
             datos.setIdPersonaRegistro(idfRegistrante);
         }
         
-            System.out.println(rutaImage+" --------------------");
+           
            if(rutaImage!=""){
-                  datos.setFotoProducto(getImage(rutaImage));
+                  if(rutaImage=="hola"){
+                    if(getOldImage()!=null){
+                        datos.setFotoProducto(getOldImage());
+                    } else {
+                        datos.setFotoProducto(null);
+                    }
+                      
+                  } else {
+                       datos.setFotoProducto(getImage(rutaImage));
+                  }
+              
+                 
               } else {
                   datos.setFotoProducto(null);
               }
               
            fun.editarDatos(datos);
            JOptionPane.showConfirmDialog(null, "Producto editado","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
-           
+           rutaImage="";
            principalVentana= new Ventana_Principal();
                     setForm(principalVentana);
            
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+          datosProductoAlmacen datos= new datosProductoAlmacen();
+        conexionProductoAlmacen fun = new conexionProductoAlmacen();
+        
+         if (fun.verificarRegistroExistente(cajaId.getText())==1){
+            int confirmacion = JOptionPane.showConfirmDialog(rootPane, "Desea eliminar el producto?","Confirmar",2);
+            if(confirmacion==0){
+                    datos.setIdProducto(cajaId.getText());
+                    fun.eliminarDatos(datos);
+                    JOptionPane.showConfirmDialog(null, "Producto eliminado","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    principalVentana= new Ventana_Principal();
+                    setForm(principalVentana); 
+                }
+        }
+        else {
+             
+             JOptionPane.showConfirmDialog(null, "No existe el producto","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    public static byte[] iconToBytes(ImageIcon icon) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(icon);
+            oos.flush();
+        }
+        return baos.toByteArray();
+    }
+    
+    
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -764,16 +818,24 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
                 }
                 
                 cajaRegistrante.setSelectedItem(NombreRegistrante);
+                
+                
                
                 
                 try{
                     byte[] imagen = registro.getFotoProducto();
+                    
                     BufferedImage bufferImage = null;
+                  
                     InputStream inputstream = new ByteArrayInputStream(imagen);
+                    
                     bufferImage = ImageIO.read(inputstream);
+                    
                     ImageIcon nIcono = new ImageIcon(bufferImage.getScaledInstance(cajafotoP.getWidth(), cajafotoP.getHeight(), 0));
+                   
                     cajafotoP.setIcon(nIcono);
-                    rutaImage="fdf";
+                    
+                    rutaImage="hola";
                 } catch(Exception e){
                     sinFotoDePerfil();
                 }
@@ -819,6 +881,29 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
             return null;
          }
     }
+        
+        private byte[] getOldImage() {
+              try {
+                   ImageIcon imageIcones = (ImageIcon) cajafotoP.getIcon();
+                   Image imagen = imageIcones.getImage();
+                   BufferedImage bufferedImage = new BufferedImage(
+                                    imagen.getWidth(null),
+                                    imagen.getHeight(null),
+                                    BufferedImage.TYPE_INT_RGB);
+                    Graphics g = bufferedImage.createGraphics();
+                    g.drawImage(imagen, 0, 0, null);
+                    g.dispose();
+                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(bufferedImage, "png", baos);
+                        byte[] bytes = baos.toByteArray();
+                        return bytes;
+                        //datos.setFotoProducto(bytes);
+                      } catch (IOException e) {
+                             e.printStackTrace();
+                             return null;
+                        }
+        
+        }
       
       private void setForm(JComponent com){
                    containerVentanas.removeAll();
