@@ -376,6 +376,103 @@ public class conexionProductoAlmacen {
         }
     }
       
+       
+       public ArrayList<datosProductoAlmacen> productosMayorCantidad(){
+           sql = "select * from producto order by Cantidad DESC LIMIT 10";
+           ArrayList<datosProductoAlmacen> datos = new ArrayList<datosProductoAlmacen>();
+           try {
+               Statement st= conect.createStatement();
+                ResultSet rs= st.executeQuery(sql);
+                while(rs.next()){
+                datos.add(new datosProductoAlmacen(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getBigDecimal(9),rs.getBigDecimal(10),rs.getBytes(11)));
+            }
+                return datos;
+           } catch (Exception e) {
+               JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                return null;
+           }
+       }
       
+       
+       
+       public DefaultTableModel mostrarTablaProductosEscasos (String buscar){
+        DefaultTableModel modelo;
+        String[]titulos={"Producto","Cantidad"};
+        modelo = new DefaultTableModel(null,titulos);
+        String[] registro = new String[2];
+        
+         sql= ("select * from fun_mostrarProducto('"+buscar+"') where cantidad<10");
+        
+        try {
+            
+            Statement st = conect.createStatement();
+   
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                registro[0] = rs.getString(2);//nombre
+                registro[1] = rs.getString(3);//cantidad
+                modelo.addRow(registro);
+            } 
+    
+            return modelo;
+        
+        } catch(Exception e) {
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+    }
+       
+       
+       public DefaultTableModel mostrarTablaUnidades (String buscar){
+        DefaultTableModel modelo;
+        String[]titulos={"Unidad"};
+        modelo = new DefaultTableModel(null,titulos);
+        String[] registro = new String[1];
+        
+         sql= ("select * from fun_mostrarUnidadProducto('"+buscar+"')");
+        
+        try {
+            
+            Statement st = conect.createStatement();
+   
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                registro[0] = rs.getString(2);//nombre
+                modelo.addRow(registro);
+            } 
+            return modelo;
+        } catch(Exception e) {
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+       }
+       
+       
+       public DefaultTableModel mostrarTablaTipos (String buscar){
+        DefaultTableModel modelo;
+        String[]titulos={"Tipos"};
+        modelo = new DefaultTableModel(null,titulos);
+        String[] registro = new String[1];
+        
+         sql= ("select * from fun_mostrarTipoProducto('"+buscar+"')");
+        
+        try {
+            
+            Statement st = conect.createStatement();
+   
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                registro[0] = rs.getString(2);//nombre
+                modelo.addRow(registro);
+            } 
+            return modelo;
+        } catch(Exception e) {
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+       }
       
 }

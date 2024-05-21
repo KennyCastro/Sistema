@@ -4,6 +4,16 @@
  */
 package CapaPresentacion.PaginaPrincipal.Ventanas;
 
+import CapaDatos.Almacen.datosProductoAlmacen;
+import CapaLogica.Almacen.conexionProductoAlmacen;
+import CapaPresentacion.PaginaPrincipal.componentes.PieChart3DDemo;
+import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.title.TextTitle;
+
+
 /**
  *
  * @author KENNY
@@ -15,6 +25,10 @@ public class Ventana_Inventario extends javax.swing.JPanel {
      */
     public Ventana_Inventario() {
         initComponents();
+        IniciarGrafico();
+        mostrarTablaProductos("");
+        mostrarUnidades("");
+        mostrarTipos("");
     }
 
     /**
@@ -27,29 +41,371 @@ public class Ventana_Inventario extends javax.swing.JPanel {
     private void initComponents() {
 
         header1 = new CapaPresentacion.PaginaPrincipal.componentes.Header();
+        btnCrear = new javax.swing.JButton();
+        graficoInventario = new CapaPresentacion.PaginaPrincipal.componentes.PieChart3DDemo();
+        btnCrear1 = new javax.swing.JButton();
+        btnCrear2 = new javax.swing.JButton();
+        btnCrear3 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableUnidades = new CapaPresentacion.PaginaPrincipal.swing.Table();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableProductosEscasos = new CapaPresentacion.PaginaPrincipal.swing.Table();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableTipos = new CapaPresentacion.PaginaPrincipal.swing.Table();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(242, 242, 242));
+        setPreferredSize(new java.awt.Dimension(921, 640));
+
+        btnCrear.setBackground(new java.awt.Color(64, 0, 17));
+        btnCrear.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        btnCrear.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/anadir-amigo.png"))); // NOI18N
+        btnCrear.setText("Crear Unidad");
+        btnCrear.setBorder(null);
+        btnCrear.setBorderPainted(false);
+        btnCrear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCrearMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCrearMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCrearMouseExited(evt);
+            }
+        });
+        btnCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearActionPerformed(evt);
+            }
+        });
+
+        btnCrear1.setBackground(new java.awt.Color(64, 0, 17));
+        btnCrear1.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        btnCrear1.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrear1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/anadir-amigo.png"))); // NOI18N
+        btnCrear1.setText("Crear Producto");
+        btnCrear1.setBorder(null);
+        btnCrear1.setBorderPainted(false);
+        btnCrear1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrear1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCrear1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCrear1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCrear1MouseExited(evt);
+            }
+        });
+        btnCrear1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrear1ActionPerformed(evt);
+            }
+        });
+
+        btnCrear2.setBackground(new java.awt.Color(64, 0, 17));
+        btnCrear2.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        btnCrear2.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrear2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/anadir-amigo.png"))); // NOI18N
+        btnCrear2.setText("Crear Tipo ");
+        btnCrear2.setBorder(null);
+        btnCrear2.setBorderPainted(false);
+        btnCrear2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrear2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCrear2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCrear2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCrear2MouseExited(evt);
+            }
+        });
+        btnCrear2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrear2ActionPerformed(evt);
+            }
+        });
+
+        btnCrear3.setBackground(new java.awt.Color(64, 0, 17));
+        btnCrear3.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        btnCrear3.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrear3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/anadir-amigo.png"))); // NOI18N
+        btnCrear3.setText("Ver reportes");
+        btnCrear3.setBorder(null);
+        btnCrear3.setBorderPainted(false);
+        btnCrear3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrear3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCrear3MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCrear3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCrear3MouseExited(evt);
+            }
+        });
+        btnCrear3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrear3ActionPerformed(evt);
+            }
+        });
+
+        tableUnidades.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableUnidades);
+
+        tableProductosEscasos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tableProductosEscasos);
+
+        tableTipos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tableTipos);
+
+        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel1.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("PRODUCTOS ESCASOS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(graficoInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(header1, javax.swing.GroupLayout.DEFAULT_SIZE, 967, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addGap(35, 35, 35)
+                .addComponent(btnCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnCrear2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnCrear3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(424, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(graficoInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCrear2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCrear3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCrearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseClicked
+
+    }//GEN-LAST:event_btnCrearMouseClicked
+
+    private void btnCrearMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseEntered
+        btnCrear.setBackground(new Color(143,27,48));
+
+    }//GEN-LAST:event_btnCrearMouseEntered
+
+    private void btnCrearMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseExited
+        btnCrear.setBackground(new Color(64,0,17)); //[64,87,68]
+    }//GEN-LAST:event_btnCrearMouseExited
+
+    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
+        //aqui abrir la ventana de creacion o edicion del personal
+        
+    }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void btnCrear1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear1MouseClicked
+
+    private void btnCrear1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear1MouseEntered
+
+    private void btnCrear1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear1MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear1MouseExited
+
+    private void btnCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrear1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear1ActionPerformed
+
+    private void btnCrear2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear2MouseClicked
+
+    private void btnCrear2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear2MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear2MouseEntered
+
+    private void btnCrear2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear2MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear2MouseExited
+
+    private void btnCrear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrear2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear2ActionPerformed
+
+    private void btnCrear3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear3MouseClicked
+
+    private void btnCrear3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear3MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear3MouseEntered
+
+    private void btnCrear3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrear3MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear3MouseExited
+
+    private void btnCrear3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrear3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrear3ActionPerformed
+
+    public void IniciarGrafico(){
+        ArrayList<datosProductoAlmacen> datos = new ArrayList<datosProductoAlmacen>();
+        conexionProductoAlmacen fun = new conexionProductoAlmacen();
+        graficoInventario.crearGrafico("Gráfico Inventarios","Cantidad en Unidades");
+        datos = fun.productosMayorCantidad();
+        if (datos!=null){
+            for(datosProductoAlmacen d: datos){
+                    graficoInventario.addElement(d.getNombreProducto(),d.getCantidad());
+                }
+        } else {
+            graficoInventario.addElement("No hay datos", 0);
+        }
+        
+        
+    
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCrear;
+    private javax.swing.JButton btnCrear1;
+    private javax.swing.JButton btnCrear2;
+    private javax.swing.JButton btnCrear3;
+    private CapaPresentacion.PaginaPrincipal.componentes.PieChart3DDemo graficoInventario;
     private CapaPresentacion.PaginaPrincipal.componentes.Header header1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private CapaPresentacion.PaginaPrincipal.swing.Table tableProductosEscasos;
+    private CapaPresentacion.PaginaPrincipal.swing.Table tableTipos;
+    private CapaPresentacion.PaginaPrincipal.swing.Table tableUnidades;
     // End of variables declaration//GEN-END:variables
+
+     public void mostrarTablaProductos(String buscar){
+         tableProductosEscasos.setDefaultEditor(Object.class, null);
+         
+        try{
+            DefaultTableModel modelo;
+            conexionProductoAlmacen fun= new conexionProductoAlmacen();
+            modelo = fun.mostrarTablaProductosEscasos(buscar);
+            tableProductosEscasos.setModel(modelo);
+
+        } catch(Exception e){
+            JOptionPane.showConfirmDialog(null,e.getMessage());
+        }
+        
+    }
+     
+     public void mostrarUnidades(String buscar){
+         tableUnidades.setDefaultEditor(Object.class, null);
+         
+        try{
+            DefaultTableModel modelo;
+            conexionProductoAlmacen fun= new conexionProductoAlmacen();
+            modelo = fun.mostrarTablaUnidades(buscar);
+            tableUnidades.setModel(modelo);
+
+        } catch(Exception e){
+            JOptionPane.showConfirmDialog(null,e.getMessage());
+        }
+        
+    }
+     
+     
+     public void mostrarTipos(String buscar){
+         tableTipos.setDefaultEditor(Object.class, null);
+         
+        try{
+            DefaultTableModel modelo;
+            conexionProductoAlmacen fun= new conexionProductoAlmacen();
+            modelo = fun.mostrarTablaTipos(buscar);
+            tableTipos.setModel(modelo);
+
+        } catch(Exception e){
+            JOptionPane.showConfirmDialog(null,e.getMessage());
+        }
+        
+    }
+
+
+
+
 }
