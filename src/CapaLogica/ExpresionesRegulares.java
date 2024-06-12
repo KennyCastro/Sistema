@@ -13,6 +13,8 @@ public class ExpresionesRegulares {
      //private static final String REGEX_SUELDO = "^\\d+(\\.\\d{1,2})?$";
     private static final String REGEX_SUELDO = "^\\d+$";
     
+    
+    //parte personacocina
     public static boolean validarNombres(String nombreApellido){
         Pattern pattern = Pattern.compile(REGEX_NOMBRE_APELLIDO);
         Matcher matcher = pattern.matcher(nombreApellido);
@@ -46,6 +48,8 @@ public class ExpresionesRegulares {
     }
     
     
+    //parte productos
+    
     private static final String REGEX_NOMBRE_PRODUCTO = "^[a-zA-Z][a-zA-Z0-9 ]*$";
     private static final String REGEX_PRECIO="^[0-9]+(\\.[0-9]{1,2})?$";
     
@@ -58,6 +62,23 @@ public class ExpresionesRegulares {
     public static boolean validarPrecio(String precio) {
         Pattern pattern = Pattern.compile(REGEX_PRECIO);
         Matcher matcher = pattern.matcher(precio);
+        return matcher.matches();
+    }
+    
+    //parte unidades
+    
+    private static final String REGEX_NOMBRE_UNIDAD = "^[a-zA-Z][a-zA-Z0-9 ]*$";
+    private static final String REGEX_CANTIDAD_EN_UNIDADES = "^[1-9]\\d*$";
+    
+    public static boolean validarNombreUnidad(String unidad) {
+        Pattern pattern = Pattern.compile(REGEX_NOMBRE_UNIDAD);
+        Matcher matcher = pattern.matcher(unidad);
+        return matcher.matches();
+    }
+    
+    public static boolean validarCantidadUnidades(String cantidadU) {
+        Pattern pattern = Pattern.compile(REGEX_CANTIDAD_EN_UNIDADES);
+        Matcher matcher = pattern.matcher(cantidadU);
         return matcher.matches();
     }
     

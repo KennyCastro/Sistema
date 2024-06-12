@@ -37,6 +37,7 @@ import static CapaLogica.Usuarios_Personal.conexionPersonalCocina.persona;
 import static CapaLogica.Almacen.conexionProductoAlmacen.tipoProducto;
 import static CapaLogica.Almacen.conexionProductoAlmacen.unidadProducto;
 import CapaLogica.ExpresionesRegulares;
+import CapaPresentacion.PaginaPrincipal.Ventanas.Ventana_Inventario;
 import CapaPresentacion.PaginaPrincipal.Ventanas.Ventana_Principal;
 import static CapaPresentacion.PaginaPrincipal.main.Principal.containerVentanas;
 import java.io.File;
@@ -49,8 +50,9 @@ import java.util.Date;
 import java.time.ZoneId;
 import java.time.LocalDate;
 import static CapaPresentacion.PaginaPrincipal.main.Principal.principalVentana;
+import static CapaPresentacion.PaginaPrincipal.main.Principal.inventario;
 import java.awt.Graphics;
-
+import static CapaPresentacion.PaginaPrincipal.Ventanas.Ventana_Principal.acciones;
 
 
 /**
@@ -107,9 +109,6 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         cajafotoP = new javax.swing.JLabel();
         btnSubir = new javax.swing.JButton();
         btnEliminarFoto = new javax.swing.JButton();
-        headerVentana = new javax.swing.JPanel();
-        btnExit = new javax.swing.JPanel();
-        txtExit = new javax.swing.JLabel();
         txtId = new javax.swing.JLabel();
         cajaId = new javax.swing.JTextField();
         txtProducto = new javax.swing.JLabel();
@@ -131,6 +130,10 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         txtVencimiento = new javax.swing.JLabel();
         cajaVencimiento = new javax.swing.JTextField();
         btnCalendar = new javax.swing.JButton();
+        Header = new javax.swing.JPanel();
+        btnExit = new javax.swing.JPanel();
+        txtExit = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -185,69 +188,6 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
             }
         });
         vent_Inicial_Productos1.add(btnEliminarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 439, 72, -1));
-
-        headerVentana.setOpaque(false);
-        headerVentana.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                headerVentanaMouseDragged(evt);
-            }
-        });
-        headerVentana.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                headerVentanaMousePressed(evt);
-            }
-        });
-
-        btnExit.setOpaque(false);
-
-        txtExit.setFont(new java.awt.Font("Roboto Black", 1, 24)); // NOI18N
-        txtExit.setForeground(new java.awt.Color(255, 255, 255));
-        txtExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtExit.setText("X");
-        txtExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        txtExit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtExitMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                txtExitMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                txtExitMouseExited(evt);
-            }
-        });
-
-        javax.swing.GroupLayout btnExitLayout = new javax.swing.GroupLayout(btnExit);
-        btnExit.setLayout(btnExitLayout);
-        btnExitLayout.setHorizontalGroup(
-            btnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnExitLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        btnExitLayout.setVerticalGroup(
-            btnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout headerVentanaLayout = new javax.swing.GroupLayout(headerVentana);
-        headerVentana.setLayout(headerVentanaLayout);
-        headerVentanaLayout.setHorizontalGroup(
-            headerVentanaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerVentanaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        headerVentanaLayout.setVerticalGroup(
-            headerVentanaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerVentanaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        vent_Inicial_Productos1.add(headerVentana, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 913, -1));
 
         txtId.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
         txtId.setForeground(new java.awt.Color(255, 255, 255));
@@ -326,7 +266,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        vent_Inicial_Productos1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(329, 59, 221, 43));
+        vent_Inicial_Productos1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 221, 43));
 
         btnEliminar.setBackground(new java.awt.Color(0, 0, 0));
         btnEliminar.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
@@ -349,7 +289,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
-        vent_Inicial_Productos1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(615, 59, 219, 43));
+        vent_Inicial_Productos1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, 219, 43));
 
         txtVencimiento.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
         txtVencimiento.setForeground(new java.awt.Color(255, 255, 255));
@@ -365,11 +305,80 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         });
         vent_Inicial_Productos1.add(btnCalendar, new org.netbeans.lib.awtextra.AbsoluteConstraints(593, 394, 49, 28));
 
+        Header.setBackground(new java.awt.Color(255, 255, 255));
+        Header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                HeaderMouseDragged(evt);
+            }
+        });
+        Header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                HeaderMousePressed(evt);
+            }
+        });
+
+        btnExit.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtExit.setBackground(new java.awt.Color(255, 255, 255));
+        txtExit.setFont(new java.awt.Font("Roboto Black", 0, 24)); // NOI18N
+        txtExit.setForeground(new java.awt.Color(0, 0, 0));
+        txtExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtExit.setText("X");
+        txtExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtExitMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtExitMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                txtExitMouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnExitLayout = new javax.swing.GroupLayout(btnExit);
+        btnExit.setLayout(btnExitLayout);
+        btnExitLayout.setHorizontalGroup(
+            btnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtExit, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+        );
+        btnExitLayout.setVerticalGroup(
+            btnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel4.setFont(new java.awt.Font("Roboto Medium", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Ventana Productos");
+
+        javax.swing.GroupLayout HeaderLayout = new javax.swing.GroupLayout(Header);
+        Header.setLayout(HeaderLayout);
+        HeaderLayout.setHorizontalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 589, Short.MAX_VALUE)
+                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        HeaderLayout.setVerticalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(HeaderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        vent_Inicial_Productos1.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 910, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vent_Inicial_Productos1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(vent_Inicial_Productos1, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,35 +388,8 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseClicked
-        //idBuscar="";
-        dispose();
-    }//GEN-LAST:event_txtExitMouseClicked
-
     
    
-    private void txtExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseEntered
-        //btnExit.setBackground(Color.red);
-        txtExit.setForeground(Color.RED);
-    }//GEN-LAST:event_txtExitMouseEntered
-
-    private void txtExitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseExited
-        //btnExit.setBackground(Color.white);
-        txtExit.setForeground(Color.WHITE);
-    }//GEN-LAST:event_txtExitMouseExited
-
-    private void headerVentanaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerVentanaMousePressed
-         xMouse = evt.getX(); //me da la posicion en el eje X de la ventana
-        yMouse = evt.getY();//me da la posicion en el eje Y de la ventana
-    }//GEN-LAST:event_headerVentanaMousePressed
-
-    private void headerVentanaMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerVentanaMouseDragged
-        int x = evt.getXOnScreen();//esto captura en todo momento donde se encuentra la ventana
-         int y = evt.getYOnScreen();
-        // este evento es cuando arrastramos la ventana por la pantalla
-        this.setLocation(x-xMouse,y- yMouse);
-    }//GEN-LAST:event_headerVentanaMouseDragged
-
     
      public void mostrarTipoProductos(){
         // cajaTipo.setDefaultEditor(Object.class, null);
@@ -623,7 +605,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         
         //System.out.println(IdfUnidad+ " ------------");
         if(IdfUnidad==""){
-            datos.setIdUnidad("950000");
+            datos.setIdUnidad("000000");
         } else {
             datos.setIdUnidad(IdfUnidad);
         }
@@ -633,7 +615,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         
         String idfRegistrante= fun.darIdRegistrante(cajaRegistrante.getSelectedItem().toString());
         if(idfRegistrante==""){
-            datos.setIdPersonaRegistro("0017");
+            datos.setIdPersonaRegistro("0010");
         } else {
             datos.setIdPersonaRegistro(idfRegistrante);
         }
@@ -655,12 +637,26 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
               } else {
                   datos.setFotoProducto(null);
               }
-              
-           fun.editarDatos(datos);
-           JOptionPane.showConfirmDialog(null, "Producto editado","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+             
+           if(acciones=="crear"){
+               fun.registrarDatos(datos);
+                JOptionPane.showConfirmDialog(null, "Producto creado","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                
+                
+           } else {
+               fun.editarDatos(datos);
+                JOptionPane.showConfirmDialog(null, "Producto editado","VENTANA DE INFORMACIÓN", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                 
+           }
+           acciones="guardar";
            rutaImage="";
            principalVentana= new Ventana_Principal();
                     setForm(principalVentana);
+                  inventario= new Ventana_Inventario();
+                setForm(inventario);  
+                    
+         
+             
            
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -677,6 +673,8 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
                     dispose();
                     principalVentana= new Ventana_Principal();
                     setForm(principalVentana); 
+                    inventario= new Ventana_Inventario();
+                    setForm(principalVentana);
                 }
         }
         else {
@@ -686,6 +684,32 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseClicked
+        dispose();
+    }//GEN-LAST:event_txtExitMouseClicked
+
+    private void txtExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseEntered
+        btnExit.setBackground(Color.red);
+        txtExit.setForeground(Color.white);
+    }//GEN-LAST:event_txtExitMouseEntered
+
+    private void txtExitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtExitMouseExited
+        btnExit.setBackground(Color.white);
+        txtExit.setForeground(Color.black);
+    }//GEN-LAST:event_txtExitMouseExited
+
+    private void HeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMouseDragged
+        int x = evt.getXOnScreen();//esto captura en todo momento donde se encuentra la ventana
+        int y = evt.getYOnScreen();
+        // este evento es cuando arrastramos la ventana por la pantalla
+        this.setLocation(x-xMouse,y- yMouse);
+    }//GEN-LAST:event_HeaderMouseDragged
+
+    private void HeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMousePressed
+        xMouse = evt.getX(); //me da la posicion en el eje X de la ventana
+        yMouse = evt.getY();//me da la posicion en el eje Y de la ventana
+    }//GEN-LAST:event_HeaderMousePressed
 
     public static byte[] iconToBytes(ImageIcon icon) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -732,6 +756,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Header;
     private javax.swing.JButton btnCalendar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarFoto;
@@ -749,7 +774,7 @@ public class Ventana_Productos_Registro extends javax.swing.JFrame {
     private javax.swing.JTextField cajaVencimiento;
     private javax.swing.JLabel cajafotoP;
     private com.toedter.calendar.JCalendar calendar;
-    private javax.swing.JPanel headerVentana;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel txtCantidad;
     private javax.swing.JLabel txtExit;
     private javax.swing.JLabel txtId;

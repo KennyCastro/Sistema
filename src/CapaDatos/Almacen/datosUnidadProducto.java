@@ -7,13 +7,15 @@ package CapaDatos.Almacen;
 public class datosUnidadProducto {
     private String IdUnidad;
     private String NombreUnidad;
+    private int CantidadEnUnidades;
 
     public datosUnidadProducto() {
     }
 
-    public datosUnidadProducto(String IdUnidad, String NombreUnidad) {
+    public datosUnidadProducto(String IdUnidad, String NombreUnidad, int CantidadEnUnidades) {
         this.IdUnidad = IdUnidad;
         this.NombreUnidad = NombreUnidad;
+        this.CantidadEnUnidades = CantidadEnUnidades;
     }
 
     public String getIdUnidad() {
@@ -30,6 +32,14 @@ public class datosUnidadProducto {
 
     public void setNombreUnidad(String NombreUnidad) {
         this.NombreUnidad = NombreUnidad;
+    }
+
+    public int getCantidadEnUnidades() {
+        return CantidadEnUnidades;
+    }
+
+    public void setCantidadEnUnidades(int CantidadEnUnidades) {
+        this.CantidadEnUnidades = CantidadEnUnidades;
     }
     
     

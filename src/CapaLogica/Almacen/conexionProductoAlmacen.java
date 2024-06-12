@@ -21,7 +21,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
 import javax.swing.table.DefaultTableModel;
-
+import static CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.VentanaTraspasoProductos.ProductosEnEspera;
+import CapaDatos.TraspasoAlmacenTienda.datosDetalleTraspasoTienda;
 /**
  *
  * @author KENNY
@@ -143,7 +144,7 @@ public class conexionProductoAlmacen {
             ResultSet rs = st.executeQuery(sql);
             
               while(rs.next()){
-                unidadProducto.add(new datosUnidadProducto(rs.getString(1),rs.getString(2)));
+                unidadProducto.add(new datosUnidadProducto(rs.getString(1),rs.getString(2),rs.getInt(3)));
 
             }
             
@@ -219,6 +220,38 @@ public class conexionProductoAlmacen {
      
      }
 
+     
+      public boolean registrarDatos(datosProductoAlmacen datos){
+
+            sql= ("call pa_guardarProducto(?,?,?,?,?,?,?,?,?,?,?)");
+             try (PreparedStatement pst = conect.prepareStatement(sql)) {
+            pst.setString(1, datos.getIdProducto());
+            pst.setString(2, datos.getNombreProducto());
+            pst.setInt(3, datos.getCantidad());
+            pst.setString(4, datos.getIdTipo());
+            pst.setString(5, datos.getIdUnidad());
+            pst.setString(6, String.valueOf(datos.getFechaVencimiento()));
+            pst.setString(7, String.valueOf(datos.getFechaVencimiento()));
+            pst.setString(8, datos.getIdPersonaRegistro());
+            pst.setBigDecimal(9, datos.getPrecioCompra());
+            pst.setBigDecimal(10, datos.getPrecioVenta());
+            pst.setBytes(11, datos.getFotoProducto());
+            
+            int n=-1;
+            n = pst.executeUpdate();
+            if(n!=-1)
+                return true;
+            else
+                return false;
+        
+        } catch(Exception e){
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+       }
+     
+     
+     
      
       public boolean editarDatos(datosProductoAlmacen datos){
 
@@ -324,6 +357,25 @@ public class conexionProductoAlmacen {
                  if(registrante.equals(nombreRegistrante)){
                      return rs.getString(1);
                  }
+             }
+             return "";
+         
+         } catch(Exception e){
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return "";
+        }
+     
+     }
+      
+       public String darNombreProducto(String idProduct){
+         sql="select * from producto where idproducto='"+idProduct+"'";
+         try{
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+             while(rs.next()){
+                 String producto = rs.getString(2);
+                     return producto;
+                 
              }
              return "";
          
@@ -475,4 +527,100 @@ public class conexionProductoAlmacen {
         }
        }
       
+       
+       public String darFechaInicio(){
+           sql="SELECT fecharegistro FROM producto WHERE TO_DATE(FECHAREGISTRO, 'YYYY-MM-DD') = ( SELECT MIN(TO_DATE(FECHAREGISTRO, 'YYYY-MM-DD')) FROM producto)";
+          String FechaInicio="";
+           try {
+               Statement st= conect.createStatement();
+                ResultSet rs= st.executeQuery(sql);
+                while(rs.next()){
+                    FechaInicio = rs.getString(1);
+            }
+                return FechaInicio;
+           } catch (Exception e) {
+               JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                return null;
+           }
+           
+       }
+       
+       
+       public String darFechaFin(){
+           sql="SELECT fecharegistro FROM producto WHERE TO_DATE(FECHAREGISTRO, 'YYYY-MM-DD') = ( SELECT MAX(TO_DATE(FECHAREGISTRO, 'YYYY-MM-DD')) FROM producto)";
+          String FechaFin="";
+           try {
+               Statement st= conect.createStatement();
+                ResultSet rs= st.executeQuery(sql);
+                while(rs.next()){
+                    FechaFin = rs.getString(1);
+            }
+                return FechaFin;
+           } catch (Exception e) {
+               JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR, INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                return null;
+           }
+           
+       }
+       
+       
+       
+       /////ESTO ES PARA VENTAS MOSTRARTABLEALMACEN
+        public DefaultTableModel mostrarTablaAlmacen (String buscar){
+        DefaultTableModel modelo;
+        String[]titulos={/*"Imagen",*/"ID","Producto","Cantidad","Unidad"};
+        modelo = new DefaultTableModel(null,titulos);
+        
+        String[] registro = new String[4];
+        
+         sql= ("select * from fun_mostrarProducto('"+buscar+"')");
+        
+        try {
+            
+            Statement st = conect.createStatement();
+   
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                //registro[0] = rs.getString(12);
+                registro[0] = rs.getString(1);
+                registro[1] = rs.getString(2);
+                registro[2] = rs.getString(3);
+                registro[3] = rs.getString(5);
+                modelo.addRow(registro);
+            }
+            return modelo;
+        } catch(Exception e) {
+            JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+    }
+       
+        
+        
+        public DefaultTableModel mostrarTablaTienda (String buscar){
+        DefaultTableModel modelo;
+        String[]titulos={"ID","Producto","Cantidad","Unidad"};
+        modelo = new DefaultTableModel(null,titulos);
+        
+        String[] registro = new String[4];
+        
+         try {
+             if(!ProductosEnEspera.isEmpty()){
+                for (datosDetalleTraspasoTienda datos : ProductosEnEspera) {
+                    registro[0]=datos.getIdProducto();
+                    registro[1]=darNombreProducto(datos.getIdProducto());
+                    registro[2]=String.valueOf(datos.getCantidadTraspaso());
+                    registro[3]=datos.getUnidadTraspaso();
+                    modelo.addRow(registro);
+                    
+                }  
+             }
+             return modelo;
+            } catch(Exception e) {
+                JOptionPane.showConfirmDialog(null, e.getMessage(),"HUBO UN ERROR INTENTE DE NUEVO", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                return null;
+            }
+    }
+       
 }

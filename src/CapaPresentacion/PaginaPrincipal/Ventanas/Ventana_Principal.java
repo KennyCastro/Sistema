@@ -3,7 +3,12 @@ package CapaPresentacion.PaginaPrincipal.Ventanas;
 
 //@author KENNY
 
+import CapaDatos.Almacen.datosProductoAlmacen;
 import CapaLogica.Almacen.conexionProductoAlmacen;
+import CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.VentanaRegistroTraspasoAlmacenTienda;
+import static CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.VentanaRegistroTraspasoAlmacenTienda.RegistrarTraspaso;
+import static CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.VentanaTraspasoProductos.ProductosEnEspera;
+import CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.VentanaTraspasoProductos;
 import CapaPresentacion.PaginaPrincipal.Ventanas.VentanasProductos.Ventana_Productos_Registro;
 
 import CapaPresentacion.PaginaPrincipal.model.EstadoTipo;
@@ -17,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import CapaPresentacion.PaginaPrincipal.swing.ScrollBar;
 import java.awt.Component;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,13 +32,15 @@ import javax.swing.table.DefaultTableModel;
  
 public class Ventana_Principal extends javax.swing.JPanel {
 
-    
+    public static String acciones="crear";
     public static String idProducto = "";
     String text;
     JTextField textFiel;
     JLabel logos;
     JLabel logoBuscador;
     JLabel logoMenu;
+    VentanaRegistroTraspasoAlmacenTienda aTienda = new VentanaRegistroTraspasoAlmacenTienda();
+    
     public Ventana_Principal() {
         initComponents();
         StyleTable();
@@ -139,6 +147,7 @@ public class Ventana_Principal extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         ScrollPanelTableInventario = new javax.swing.JScrollPane();
         tableInventario = new CapaPresentacion.PaginaPrincipal.swing.Table();
+        btnEnviarTienda = new javax.swing.JButton();
         header1 = new CapaPresentacion.PaginaPrincipal.componentes.Header();
 
         setBackground(new java.awt.Color(242, 242, 242));
@@ -165,6 +174,7 @@ public class Ventana_Principal extends javax.swing.JPanel {
 
         ScrollPanelTableInventario.setBorder(null);
 
+        tableInventario.setBackground(new java.awt.Color(255, 255, 255));
         tableInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -188,6 +198,28 @@ public class Ventana_Principal extends javax.swing.JPanel {
         });
         ScrollPanelTableInventario.setViewportView(tableInventario);
 
+        btnEnviarTienda.setBackground(new java.awt.Color(64, 0, 17));
+        btnEnviarTienda.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        btnEnviarTienda.setForeground(new java.awt.Color(255, 255, 255));
+        btnEnviarTienda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/IconoEnviarProductos.png"))); // NOI18N
+        btnEnviarTienda.setText("Enviar Tienda");
+        btnEnviarTienda.setBorder(null);
+        btnEnviarTienda.setBorderPainted(false);
+        btnEnviarTienda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEnviarTienda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEnviarTiendaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEnviarTiendaMouseExited(evt);
+            }
+        });
+        btnEnviarTienda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarTiendaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
@@ -197,15 +229,21 @@ public class Ventana_Principal extends javax.swing.JPanel {
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEnviarTienda, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(ScrollPanelTableInventario))
                 .addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBorder1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1))
+                    .addGroup(panelBorder1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnEnviarTienda, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(ScrollPanelTableInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
@@ -242,23 +280,33 @@ public class Ventana_Principal extends javax.swing.JPanel {
             int fila = tableInventario.rowAtPoint(evt.getPoint());; // Obtiene la fila seleccionada
             
             idProducto = tableInventario.getValueAt(fila, 0).toString();
-           // System.out.println(idProducto);
-            // Crea un nuevo JFrame
+           acciones="guardar";
             Ventana_Productos_Registro VentProductos = new Ventana_Productos_Registro();
             VentProductos.setVisible(true);
         }
     }//GEN-LAST:event_tableInventarioMouseClicked
 
+    private void btnEnviarTiendaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEnviarTiendaMouseEntered
+        btnEnviarTienda.setBackground(new Color(143,27,48));
+    }//GEN-LAST:event_btnEnviarTiendaMouseEntered
 
-    
-    
-    
-    
-    
-    
-    
+    private void btnEnviarTiendaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEnviarTiendaMouseExited
+        btnEnviarTienda.setBackground(new Color(64,0,17)); //[64,87,68]
+    }//GEN-LAST:event_btnEnviarTiendaMouseExited
+
+    private void btnEnviarTiendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTiendaActionPerformed
+        aTienda.dispose();
+        RegistrarTraspaso.dispose();
+       ProductosEnEspera=new ArrayList<datosProductoAlmacen>();
+        aTienda = new VentanaRegistroTraspasoAlmacenTienda();
+        aTienda.setVisible(true);
+       
+    }//GEN-LAST:event_btnEnviarTiendaActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ScrollPanelTableInventario;
+    private javax.swing.JButton btnEnviarTienda;
     private CapaPresentacion.PaginaPrincipal.componentes.Cards cards1;
     private CapaPresentacion.PaginaPrincipal.componentes.Cards cards2;
     private CapaPresentacion.PaginaPrincipal.componentes.Cards cards3;
